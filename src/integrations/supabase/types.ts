@@ -14,16 +14,268 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      articles: {
+        Row: {
+          author_id: string
+          category: string
+          content: string
+          created_at: string
+          id: string
+          published: boolean
+          summary: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author_id: string
+          category?: string
+          content?: string
+          created_at?: string
+          id?: string
+          published?: boolean
+          summary?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author_id?: string
+          category?: string
+          content?: string
+          created_at?: string
+          id?: string
+          published?: boolean
+          summary?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      consultations: {
+        Row: {
+          created_at: string
+          id: string
+          nutritionist_id: string
+          nutritionist_notes: string
+          patient_id: string
+          patient_notes: string
+          payment_status: Database["public"]["Enums"]["payment_status"]
+          preferred_date: string | null
+          preferred_time_note: string
+          scheduled_at: string | null
+          status: Database["public"]["Enums"]["consultation_status"]
+          type: Database["public"]["Enums"]["consultation_type"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          nutritionist_id: string
+          nutritionist_notes?: string
+          patient_id: string
+          patient_notes?: string
+          payment_status?: Database["public"]["Enums"]["payment_status"]
+          preferred_date?: string | null
+          preferred_time_note?: string
+          scheduled_at?: string | null
+          status?: Database["public"]["Enums"]["consultation_status"]
+          type?: Database["public"]["Enums"]["consultation_type"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          nutritionist_id?: string
+          nutritionist_notes?: string
+          patient_id?: string
+          patient_notes?: string
+          payment_status?: Database["public"]["Enums"]["payment_status"]
+          preferred_date?: string | null
+          preferred_time_note?: string
+          scheduled_at?: string | null
+          status?: Database["public"]["Enums"]["consultation_status"]
+          type?: Database["public"]["Enums"]["consultation_type"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      meal_comments: {
+        Row: {
+          author_id: string
+          content: string
+          created_at: string
+          id: string
+          meal_log_id: string
+          patient_id: string
+        }
+        Insert: {
+          author_id: string
+          content: string
+          created_at?: string
+          id?: string
+          meal_log_id: string
+          patient_id: string
+        }
+        Update: {
+          author_id?: string
+          content?: string
+          created_at?: string
+          id?: string
+          meal_log_id?: string
+          patient_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "meal_comments_meal_log_id_fkey"
+            columns: ["meal_log_id"]
+            isOneToOne: false
+            referencedRelation: "meal_logs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      meal_logs: {
+        Row: {
+          created_at: string
+          feedback: Database["public"]["Enums"]["feedback_level"] | null
+          feeling: string
+          foods: string
+          id: string
+          log_date: string
+          log_time: string
+          meal_type: Database["public"]["Enums"]["meal_type"]
+          notes: string
+          patient_id: string
+          portions: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          feedback?: Database["public"]["Enums"]["feedback_level"] | null
+          feeling?: string
+          foods: string
+          id?: string
+          log_date?: string
+          log_time?: string
+          meal_type: Database["public"]["Enums"]["meal_type"]
+          notes?: string
+          patient_id: string
+          portions?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          feedback?: Database["public"]["Enums"]["feedback_level"] | null
+          feeling?: string
+          foods?: string
+          id?: string
+          log_date?: string
+          log_time?: string
+          meal_type?: Database["public"]["Enums"]["meal_type"]
+          notes?: string
+          patient_id?: string
+          portions?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      patient_links: {
+        Row: {
+          created_at: string
+          id: string
+          nutritionist_id: string
+          patient_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          nutritionist_id: string
+          patient_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          nutritionist_id?: string
+          patient_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          full_name: string
+          id: string
+          invite_code: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          full_name?: string
+          id: string
+          invite_code?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          full_name?: string
+          id?: string
+          invite_code?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      generate_invite_code: { Args: never; Returns: string }
+      grant_self_role: {
+        Args: { _role: Database["public"]["Enums"]["app_role"] }
+        Returns: undefined
+      }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_my_patient: { Args: { _patient_id: string }; Returns: boolean }
+      link_to_nutritionist: { Args: { _code: string }; Returns: string }
+      my_nutritionist_id: { Args: never; Returns: string }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "nutritionist" | "patient"
+      consultation_status:
+        | "solicitada"
+        | "confirmada"
+        | "realizada"
+        | "cancelada"
+      consultation_type: "inicial" | "seguimiento"
+      feedback_level: "excelente" | "bien" | "a_mejorar"
+      meal_type: "desayuno" | "almuerzo" | "merienda" | "cena" | "colacion"
+      payment_status: "pendiente" | "pagado"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +402,18 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["nutritionist", "patient"],
+      consultation_status: [
+        "solicitada",
+        "confirmada",
+        "realizada",
+        "cancelada",
+      ],
+      consultation_type: ["inicial", "seguimiento"],
+      feedback_level: ["excelente", "bien", "a_mejorar"],
+      meal_type: ["desayuno", "almuerzo", "merienda", "cena", "colacion"],
+      payment_status: ["pendiente", "pagado"],
+    },
   },
 } as const
