@@ -13,6 +13,8 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedInicioRouteImport } from './routes/_authenticated/inicio'
+import { Route as AuthenticatedNutricionistaRouteRouteImport } from './routes/_authenticated/nutricionista/route'
+import { Route as AuthenticatedPacienteRouteRouteImport } from './routes/_authenticated/paciente/route'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -33,15 +35,31 @@ const AuthenticatedInicioRoute = AuthenticatedInicioRouteImport.update({
   path: '/inicio',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedNutricionistaRouteRoute =
+  AuthenticatedNutricionistaRouteRouteImport.update({
+    id: '/nutricionista',
+    path: '/nutricionista',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedPacienteRouteRoute =
+  AuthenticatedPacienteRouteRouteImport.update({
+    id: '/paciente',
+    path: '/paciente',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/nutricionista': typeof AuthenticatedNutricionistaRouteRoute
+  '/paciente': typeof AuthenticatedPacienteRouteRoute
   '/inicio': typeof AuthenticatedInicioRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/nutricionista': typeof AuthenticatedNutricionistaRouteRoute
+  '/paciente': typeof AuthenticatedPacienteRouteRoute
   '/inicio': typeof AuthenticatedInicioRoute
 }
 export interface FileRoutesById {
@@ -49,14 +67,23 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/_authenticated/nutricionista': typeof AuthenticatedNutricionistaRouteRoute
+  '/_authenticated/paciente': typeof AuthenticatedPacienteRouteRoute
   '/_authenticated/inicio': typeof AuthenticatedInicioRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/inicio'
+  fullPaths: '/' | '/auth' | '/nutricionista' | '/paciente' | '/inicio'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/inicio'
-  id: '__root__' | '/' | '/_authenticated' | '/auth' | '/_authenticated/inicio'
+  to: '/' | '/auth' | '/nutricionista' | '/paciente' | '/inicio'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/_authenticated/nutricionista'
+    | '/_authenticated/paciente'
+    | '/_authenticated/inicio'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -95,14 +122,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedInicioRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/nutricionista': {
+      id: '/_authenticated/nutricionista'
+      path: '/nutricionista'
+      fullPath: '/nutricionista'
+      preLoaderRoute: typeof AuthenticatedNutricionistaRouteRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/paciente': {
+      id: '/_authenticated/paciente'
+      path: '/paciente'
+      fullPath: '/paciente'
+      preLoaderRoute: typeof AuthenticatedPacienteRouteRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedNutricionistaRouteRoute: typeof AuthenticatedNutricionistaRouteRoute
+  AuthenticatedPacienteRouteRoute: typeof AuthenticatedPacienteRouteRoute
   AuthenticatedInicioRoute: typeof AuthenticatedInicioRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedNutricionistaRouteRoute: AuthenticatedNutricionistaRouteRoute,
+  AuthenticatedPacienteRouteRoute: AuthenticatedPacienteRouteRoute,
   AuthenticatedInicioRoute: AuthenticatedInicioRoute,
 }
 
