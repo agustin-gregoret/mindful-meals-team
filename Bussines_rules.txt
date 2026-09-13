@@ -1,0 +1,53 @@
+=========================================
+REGLAS DE NEGOCIO Y PERMISOS DE LA APP
+=========================================
+
+1. USUARIOS Y ROLES
+-----------------------------------------
+- Existen dos roles principales en la plataforma: Paciente y Nutricionista.
+- Al registrarse, cada usuario debe elegir uno de estos dos roles.
+- Códigos de Invitación: A cada Nutricionista se le genera automáticamente un código único de 6 caracteres. Este código se utiliza para que los pacientes puedan solicitar vincularse con ellos.
+
+2. VINCULACION (PACIENTE <-> NUTRICIONISTA)
+-----------------------------------------
+- Exclusividad: Un paciente solo puede estar vinculado a un (1) nutricionista a la vez. Si el paciente ingresa el código de otro profesional, el vínculo anterior se reemplaza por el nuevo.
+- Mecanismo de unión: El paciente usa el código de invitación del nutricionista para vincularse. Un usuario no puede vincularse consigo mismo.
+- Desvinculación: Tanto el paciente como el nutricionista tienen permisos para romper este vínculo en cualquier momento.
+
+3. REGISTRO DE COMIDAS (DIARIO DE ALIMENTACION)
+-----------------------------------------
+- Tipos de comidas permitidas: Desayuno, Almuerzo, Merienda, Cena y Colación.
+- Permisos del Paciente:
+  * Pueden registrar sus comidas (indicando qué comieron, porciones, notas y cómo se sintieron).
+  * Tienen control total (crear, ver, editar y eliminar) exclusivamente sobre sus propios registros.
+- Permisos del Nutricionista:
+  * Pueden ver los registros de comidas únicamente de aquellos pacientes que están vinculados a ellos.
+  * Feedback: Pueden evaluar los registros de sus pacientes, asignando niveles de calificación ("Excelente", "Bien", "A mejorar").
+
+4. INTERACCION Y COMENTARIOS
+-----------------------------------------
+- Comentarios en Comidas: Existe un sistema de mensajería/comentarios asociado a cada registro de comida.
+- Tanto el paciente como el nutricionista vinculado pueden intercambiar comentarios en un registro.
+- Cada usuario solo puede editar o eliminar sus propios mensajes.
+
+5. CONSULTAS (TURNOS)
+-----------------------------------------
+- Tipos de consulta: Inicial o Seguimiento.
+- Estados de una consulta: Solicitada, Confirmada, Realizada, Cancelada.
+- Estado de Pago: Pendiente o Pagado.
+- Reglas para Pacientes:
+  * Solo pueden solicitar turnos con el nutricionista al que están actualmente vinculados.
+  * Pueden ver el historial y el estado de sus propias consultas.
+- Reglas para Nutricionistas:
+  * Tienen control absoluto sobre su agenda: pueden agendar turnos manualmente para sus pacientes, aceptar/confirmar las solicitudes entrantes, modificarlas o cancelarlas.
+
+6. ARTICULOS O PUBLICACIONES (BLOG/RECURSOS)
+-----------------------------------------
+- Creación de contenido: Solo los usuarios con el rol de Nutricionista tienen permiso para crear artículos (los cuales incluyen título, categoría, resumen y contenido).
+- Visibilidad:
+  * Un artículo tiene un estado de "Publicado" (verdadero o falso).
+  * Los nutricionistas pueden ver, editar o eliminar sus propios artículos en cualquier estado (borrador o publicado).
+  * Cualquier usuario en la plataforma puede leer los artículos solo si estos están marcados como "Publicados".
+
+=========================================
+Nota: Estas reglas están garantizadas a nivel de base de datos usando las políticas de seguridad (Row Level Security) de Supabase.
