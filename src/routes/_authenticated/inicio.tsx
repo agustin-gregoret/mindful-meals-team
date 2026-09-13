@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { getActiveRole, roleHome, setActiveRole, useMe } from "@/lib/auth";
 import type { AppRole } from "@/lib/labels";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/_authenticated/inicio")({
@@ -18,14 +18,23 @@ function Inicio() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
+  const autoGranted = useRef(false);
   useEffect(() => {
     if (!me.data) return;
     const roles = me.data.roles;
-    if (roles.length === 0) return;
     const preferred = getActiveRole();
+    if (roles.length === 0) {
+      // Google sign-ups carry no role: apply the one chosen on the auth page, if any.
+      if (preferred && !autoGranted.current) {
+        autoGranted.current = true;
+        choose.mutate(preferred);
+      }
+      return;
+    }
     const target = preferred && roles.includes(preferred) ? preferred : roles[0];
     setActiveRole(target);
     navigate({ to: roleHome(target), replace: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [me.data, navigate]);
 
   const choose = useMutation({
